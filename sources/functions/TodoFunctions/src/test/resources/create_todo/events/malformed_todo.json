@@ -1,0 +1,31 @@
+{
+  "resource": "/todos",
+  "path": "/todos/",
+  "httpMethod": "POST",
+  "body": "{\"Create integration tests for todo crud microservices.\"}",
+  "headers": {
+    "Accept": "*/*",
+    "Accept-Encoding": "gzip, deflate, br",
+    "Cache-Control": "no-cache",
+    "Content-Type": "application/json",
+    "Host": "ba78uj3lgi.execute-api.eu-central-1.amazonaws.com",
+    "Postman-Token": "02f67be0-2747-478a-88ec-2d9a5255d1c1",
+    "User-Agent": "PostmanRuntime/7.28.0",
+    "Via": "1.1 f14d816589c938c13b4401641d90dcd2.cloudfront.net (CloudFront)",
+    "X-Amz-Cf-Id": "-PCD4wFzRIs4y_MxWkobwb4DHegHgS3SShDNKNyweEjieLQopc_JfQ==",
+    "X-Amzn-Trace-Id": "Root=1-60a95cc1-3c7928357c066ee1055fb956",
+    "X-Forwarded-For": "53.238.157.211, 64.252.133.36",
+    "X-Forwarded-Port": "443",
+    "X-Forwarded-Proto": "https"
+  },
+  "requestContext": {
+    "accountId": "123456789012",
+    "resourceId": "123456",
+    "stage": "prod",
+    "requestId": "c6af9ac6-7b61-11e6-9a41-93e8deadbeef",
+    "requestTime": "09/Apr/2015:12:34:56 +0000",
+    "requestTimeEpoch": 1428582896000
+  },
+  "queryStringParameters": null,
+  "pathParameters": null
+}

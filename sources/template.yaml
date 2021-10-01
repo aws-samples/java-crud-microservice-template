@@ -1,0 +1,213 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  crud-microservice
+  SAM Template for java crud-microservice
+
+Parameters:
+  LogLevel:
+    Type: String
+    Default: INFO
+  RetentionInDays:
+    Type: Number
+    Default: 14
+    Description: CloudWatch Logs retention period for Lambda functions
+  PageSize:
+    Type: Number
+    Default: 2
+    Description: Number of items retrieved in the database
+
+Globals:
+  Function:
+    Timeout: 300
+    Tracing: Active
+    Runtime: java11
+    MemorySize: 512
+    CodeUri: functions/TodoFunctions
+    Environment:
+      Variables:
+        TABLE_NAME: !Ref TodosTable
+        POWERTOOLS_LOG_LEVEL: !Ref LogLevel
+        POWERTOOLS_METRICS_NAMESPACE: todos
+
+Resources:
+  TodosTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+
+  ListTodosFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.amazonaws.todo_crud_microservice.todo.ListTodosFunction::handleRequest
+      Environment:
+        Variables:
+          PAGE_SIZE: !Ref PageSize
+          POWERTOOLS_SERVICE_NAME: list_todo
+      Events:
+        ReadTodo:
+          Type: Api
+          Properties:
+            Path: /todos
+            Method: GET
+            RestApiId: !Ref Api
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref TodosTable
+
+  ListTodosLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${ListTodosFunction}"
+      RetentionInDays: !Ref RetentionInDays
+
+  CreateTodoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.amazonaws.todo_crud_microservice.todo.CreateTodoFunction::handleRequest
+      Environment:
+        Variables:
+          POWERTOOLS_SERVICE_NAME: create_todo
+      Events:
+        CreateTodo:
+          Type: Api
+          Properties:
+            Path: /todos
+            Method: POST
+            RestApiId: !Ref Api
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref TodosTable
+
+  CreateTodoLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${CreateTodoFunction}"
+      RetentionInDays: !Ref RetentionInDays
+
+  ReadTodoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.amazonaws.todo_crud_microservice.todo.ReadTodoFunction::handleRequest
+      Environment:
+        Variables:
+          POWERTOOLS_SERVICE_NAME: read_todo
+      Events:
+        ReadTodo:
+          Type: Api
+          Properties:
+            Path: /todos/{id}
+            Method: GET
+            RestApiId: !Ref Api
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref TodosTable
+
+  ReadTodoLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${ReadTodoFunction}"
+      RetentionInDays: !Ref RetentionInDays
+
+  UpdateTodoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.amazonaws.todo_crud_microservice.todo.UpdateTodoFunction::handleRequest
+      Environment:
+        Variables:
+          POWERTOOLS_SERVICE_NAME: update_todo
+      Events:
+        CreateTodo:
+          Type: Api
+          Properties:
+            Path: /todos/{id}
+            Method: PUT
+            RestApiId: !Ref Api
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TodosTable
+
+  UpdateTodoLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${UpdateTodoFunction}"
+      RetentionInDays: !Ref RetentionInDays
+
+  DeleteTodoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.amazonaws.todo_crud_microservice.todo.DeleteTodoFunction::handleRequest
+      Environment:
+        Variables:
+          POWERTOOLS_SERVICE_NAME: delete_todo
+      Events:
+        CreateTodo:
+          Type: Api
+          Properties:
+            Path: /todos/{id}
+            Method: DELETE
+            RestApiId: !Ref Api
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TodosTable
+
+  DeleteTodoLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${DeleteTodoFunction}"
+      RetentionInDays: !Ref RetentionInDays
+
+  Api:
+    Type: AWS::Serverless::Api
+    Properties:
+      EndpointConfiguration: REGIONAL
+      StageName: prod
+      TracingEnabled: true
+
+# To deploy on AWS SAR (Serverless Application Repository)
+# sam package --template-file template.yaml --output-template-file packaged.yaml --s3-bucket <bucketname>
+# sam publish --template packaged.yaml --region <region>
+# aws serverlessrepo put-application-policy --application-id arn:aws:serverlessrepo:<region>:<accountid>:applications/serverless-java-crud-microservice --statements Principals=*,PrincipalOrgIDs=<o-yourorgid>,Actions=Deploy
+Metadata:
+  AWS::ServerlessRepo::Application:
+    Name: serverless-java-crud-microservice
+    Description: Simple CRUD microservice, using API GW, Lambda and DynamoDB
+    Author: Jerome Van Der Linden
+    SpdxLicenseId: MIT
+    LicenseUrl: LICENSE
+    ReadmeUrl: README.md
+    Labels: ['microservice', 'crud', 'java']
+    HomePageUrl: https://github.com/aws-samples/serverless-java-crud-microservice
+    SemanticVersion: 1.0.0
+    SourceCodeUrl: https://github.com/aws-samples/jserverless-ava-crud-microservice/sources
+
+Outputs:
+  TodosTable:
+    Description: "Todos DynamoDB table"
+    Value: !Ref TodosTable
+  TodosApi:
+    Description: "API Gateway endpoint URL for Prod stage for Todos API"
+    Value: !Sub "https://${Api}.execute-api.${AWS::Region}.amazonaws.com/prod/todos/"
+  CreateTodoFunction:
+    Description: "CreateTodo Function ARN"
+    Value: !GetAtt CreateTodoFunction.Arn
+  ReadTodoFunction:
+    Description: "ReadTodo Function ARN"
+    Value: !GetAtt ReadTodoFunction.Arn
+  UpdateTodoFunction:
+    Description: "UpdateTodo Function ARN"
+    Value: !GetAtt UpdateTodoFunction.Arn
+  DeleteTodoFunction:
+    Description: "DeleteTodo Function ARN"
+    Value: !GetAtt DeleteTodoFunction.Arn
+  ListTodoFunction:
+    Description: "ListTodo Function ARN"
+    Value: !GetAtt ListTodosFunction.Arn
+
+

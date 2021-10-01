@@ -1,0 +1,5 @@
+{
+  "body": "{\"error\":\"Bad request\", \"message\":\"Invalid {{cookiecutter.object_model|capitalize}}: description must not be null\"}",
+  "statusCode": 400
+}
+

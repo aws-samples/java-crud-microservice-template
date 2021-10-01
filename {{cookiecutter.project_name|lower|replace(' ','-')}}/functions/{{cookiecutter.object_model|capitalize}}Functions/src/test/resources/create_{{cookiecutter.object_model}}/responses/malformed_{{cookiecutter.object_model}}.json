@@ -1,0 +1,5 @@
+{
+  "body": "{\"error\":\"Bad request\", \"message\":\"{{cookiecutter.object_model|capitalize}} is malformed\"}",
+  "statusCode": 400
+}
+

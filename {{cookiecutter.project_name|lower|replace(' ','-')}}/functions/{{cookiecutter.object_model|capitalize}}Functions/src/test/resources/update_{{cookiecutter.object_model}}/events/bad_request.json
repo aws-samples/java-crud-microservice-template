@@ -1,0 +1,50 @@
+{
+    "resource": "/{{cookiecutter.object_model}}s/{id}",
+    "path": "/{{cookiecutter.object_model}}s/",
+    "httpMethod": "PUT",
+    "body": "{\"task\": \"Add unit tests to my Lambda functions\", \"description\": \"Create python unit tests for each Lambda function in the crud microservice\"}",
+    "headers": {
+        "Accept": "*/*",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Cache-Control": "no-cache",
+        "CloudFront-Forwarded-Proto": "https",
+        "CloudFront-Is-Desktop-Viewer": "true",
+        "CloudFront-Is-Mobile-Viewer": "false",
+        "CloudFront-Is-SmartTV-Viewer": "false",
+        "CloudFront-Is-Tablet-Viewer": "false",
+        "CloudFront-Viewer-Country": "IE",
+        "Content-Type": "application/json",
+        "Host": "ba78uj3lgi.execute-api.eu-central-1.amazonaws.com",
+        "Postman-Token": "9a3c3406-dde8-4bbc-aabb-441a4efd4633",
+        "User-Agent": "PostmanRuntime/7.28.0",
+        "Via": "1.1 f14d816589c938c13b4401641d90dcd2.cloudfront.net (CloudFront)",
+        "X-Amz-Cf-Id": "IuKhxvRDD8mS86RSG87nVHU24v9u89H6o90m45xNF85K6mdO32MpHA==",
+        "X-Amzn-Trace-Id": "Root=1-60a95cd6-630b7a3b534987054575898f",
+        "X-Forwarded-For": "53.238.157.211, 64.252.133.149",
+        "X-Forwarded-Port": "443",
+        "X-Forwarded-Proto": "https"
+    },
+    "queryStringParameters": null,
+    "multiValueQueryStringParameters": null,
+    "pathParameters": {
+        "id": ""
+    },
+    "stageVariables": null,
+    "requestContext": {
+        "resourceId": "76ju98",
+        "resourcePath": "/{{cookiecutter.object_model}}s/{id}",
+        "httpMethod": "PUT",
+        "extendedRequestId": "fvtxgF9mFiAFtdw=",
+        "requestTime": "22/May/2021:19:34:46 +0000",
+        "path": "/Prod/{{cookiecutter.object_model}}s/8f72f972-48b6-4655-b179-5e698a2f1c4f",
+        "accountId": "123456789012",
+        "protocol": "HTTP/1.1",
+        "stage": "Prod",
+        "domainPrefix": "ba78uj3lgi",
+        "requestTimeEpoch": 1621712086346,
+        "requestId": "38900f56-bfbd-4128-bf2d-183316517441",
+        "domainName": "ba78uj3lgi.execute-api.eu-central-1.amazonaws.com",
+        "apiId": "ba78uj3lgi"
+    },
+    "isBase64Encoded": false
+}

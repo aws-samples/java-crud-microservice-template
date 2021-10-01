@@ -1,0 +1,49 @@
+{
+    "resource": "/todos/{id}",
+    "path": "/todos/8f72f972-48b6-4655-b179-5e698a2f1c4f",
+    "httpMethod": "DELETE",
+    "body": null,
+    "headers": {
+        "Accept": "*/*",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Cache-Control": "no-cache",
+        "CloudFront-Forwarded-Proto": "https",
+        "CloudFront-Is-Desktop-Viewer": "true",
+        "CloudFront-Is-Mobile-Viewer": "false",
+        "CloudFront-Is-SmartTV-Viewer": "false",
+        "CloudFront-Is-Tablet-Viewer": "false",
+        "CloudFront-Viewer-Country": "IE",
+        "Host": "ba78uj3lgi.execute-api.eu-central-1.amazonaws.com",
+        "Postman-Token": "e65682c3-fe80-4aed-b7c9-ce8a95518ac4",
+        "User-Agent": "PostmanRuntime/7.28.0",
+        "Via": "1.1 f14d816589c938c13b4401641d90dcd2.cloudfront.net (CloudFront)",
+        "X-Amz-Cf-Id": "h9205plhqQssKGCLtW7LBsfZMcCdTWHH3-gY0Wt66oHAT2DYerJEKA==",
+        "X-Amzn-Trace-Id": "Root=1-60a95cdd-415133e12b79fea36fd078bf",
+        "X-Forwarded-For": "53.238.157.211, 64.252.133.147",
+        "X-Forwarded-Port": "443",
+        "X-Forwarded-Proto": "https"
+    },
+    "queryStringParameters": null,
+    "multiValueQueryStringParameters": null,
+    "pathParameters": {
+        "id": "8f72f972-48b6-4655-b179-5e698a2f1c4f"
+    },
+    "stageVariables": null,
+    "requestContext": {
+        "resourceId": "76ju98",
+        "resourcePath": "/todos/{id}",
+        "httpMethod": "DELETE",
+        "extendedRequestId": "fvtysHx1liAFeaA=",
+        "requestTime": "22/May/2021:19:34:53 +0000",
+        "path": "/Prod/todos/c1a125fa-6e63-4597-a42a-7561fe1e2f02",
+        "accountId": "123456789012",
+        "protocol": "HTTP/1.1",
+        "stage": "Prod",
+        "domainPrefix": "ba78uj3lgi",
+        "requestTimeEpoch": 1621712093931,
+        "requestId": "55e4bc5d-13e1-4872-9643-0f730eac7c21",
+        "domainName": "ba78uj3lgi.execute-api.eu-central-1.amazonaws.com",
+        "apiId": "ba78uj3lgi"
+    },
+    "isBase64Encoded": false
+}

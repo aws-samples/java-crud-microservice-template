@@ -1,0 +1,5 @@
+{
+  "project_name": "Name of the project",
+  "object_model": "Model to create / read / update / delete",
+  "runtime": "java11"
+}

@@ -1,0 +1,5 @@
+{
+  "body": "{\"error\":\"Bad request\", \"message\":\"Todo is malformed\"}",
+  "statusCode": 400
+}
+

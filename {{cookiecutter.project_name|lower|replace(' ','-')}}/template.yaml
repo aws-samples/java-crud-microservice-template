@@ -1,0 +1,196 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  crud-microservice
+  SAM Template for java crud-microservice
+
+Parameters:
+  LogLevel:
+    Type: String
+    Default: INFO
+  RetentionInDays:
+    Type: Number
+    Default: 14
+    Description: CloudWatch Logs retention period for Lambda functions
+  PageSize:
+    Type: Number
+    Default: 2
+    Description: Number of items retrieved in the database
+
+Globals:
+  Function:
+    Timeout: 300
+    Tracing: Active
+    Runtime: java11
+    MemorySize: 512
+    CodeUri: functions/{{cookiecutter.object_model|capitalize}}Functions
+    Environment:
+      Variables:
+        TABLE_NAME: !Ref {{cookiecutter.object_model|capitalize}}sTable
+        POWERTOOLS_LOG_LEVEL: !Ref LogLevel
+        POWERTOOLS_METRICS_NAMESPACE: {{cookiecutter.object_model}}s
+
+Resources:
+  {{cookiecutter.object_model|capitalize}}sTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: "id"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "id"
+          KeyType: "HASH"
+
+  List{{cookiecutter.object_model|capitalize}}sFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.mycompany.{{cookiecutter.project_name|lower|replace(' ', '_')|replace('-', '_')}}.{{cookiecutter.object_model}}.List{{cookiecutter.object_model|capitalize}}sFunction::handleRequest
+      Environment:
+        Variables:
+          PAGE_SIZE: !Ref PageSize
+          POWERTOOLS_SERVICE_NAME: list_{{cookiecutter.object_model}}
+      Events:
+        Read{{cookiecutter.object_model|capitalize}}:
+          Type: Api
+          Properties:
+            Path: /{{cookiecutter.object_model}}s
+            Method: GET
+            RestApiId: !Ref Api
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref {{cookiecutter.object_model|capitalize}}sTable
+
+  List{{cookiecutter.object_model|capitalize}}sLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${List{{cookiecutter.object_model|capitalize}}sFunction}"
+      RetentionInDays: !Ref RetentionInDays
+
+  Create{{cookiecutter.object_model|capitalize}}Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.mycompany.{{cookiecutter.project_name|lower|replace(' ', '_')|replace('-', '_')}}.{{cookiecutter.object_model}}.Create{{cookiecutter.object_model|capitalize}}Function::handleRequest
+      Environment:
+        Variables:
+          POWERTOOLS_SERVICE_NAME: create_{{cookiecutter.object_model}}
+      Events:
+        Create{{cookiecutter.object_model|capitalize}}:
+          Type: Api
+          Properties:
+            Path: /{{cookiecutter.object_model}}s
+            Method: POST
+            RestApiId: !Ref Api
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref {{cookiecutter.object_model|capitalize}}sTable
+
+  Create{{cookiecutter.object_model|capitalize}}LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${Create{{cookiecutter.object_model|capitalize}}Function}"
+      RetentionInDays: !Ref RetentionInDays
+
+  Read{{cookiecutter.object_model|capitalize}}Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.mycompany.{{cookiecutter.project_name|lower|replace(' ', '_')|replace('-', '_')}}.{{cookiecutter.object_model}}.Read{{cookiecutter.object_model|capitalize}}Function::handleRequest
+      Environment:
+        Variables:
+          POWERTOOLS_SERVICE_NAME: read_{{cookiecutter.object_model}}
+      Events:
+        Read{{cookiecutter.object_model|capitalize}}:
+          Type: Api
+          Properties:
+            Path: /{{cookiecutter.object_model}}s/{id}
+            Method: GET
+            RestApiId: !Ref Api
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref {{cookiecutter.object_model|capitalize}}sTable
+
+  Read{{cookiecutter.object_model|capitalize}}LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${Read{{cookiecutter.object_model|capitalize}}Function}"
+      RetentionInDays: !Ref RetentionInDays
+
+  Update{{cookiecutter.object_model|capitalize}}Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.mycompany.{{cookiecutter.project_name|lower|replace(' ', '_')|replace('-', '_')}}.{{cookiecutter.object_model}}.Update{{cookiecutter.object_model|capitalize}}Function::handleRequest
+      Environment:
+        Variables:
+          POWERTOOLS_SERVICE_NAME: update_{{cookiecutter.object_model}}
+      Events:
+        Create{{cookiecutter.object_model|capitalize}}:
+          Type: Api
+          Properties:
+            Path: /{{cookiecutter.object_model}}s/{id}
+            Method: PUT
+            RestApiId: !Ref Api
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref {{cookiecutter.object_model|capitalize}}sTable
+
+  Update{{cookiecutter.object_model|capitalize}}LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${Update{{cookiecutter.object_model|capitalize}}Function}"
+      RetentionInDays: !Ref RetentionInDays
+
+  Delete{{cookiecutter.object_model|capitalize}}Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.mycompany.{{cookiecutter.project_name|lower|replace(' ', '_')|replace('-', '_')}}.{{cookiecutter.object_model}}.Delete{{cookiecutter.object_model|capitalize}}Function::handleRequest
+      Environment:
+        Variables:
+          POWERTOOLS_SERVICE_NAME: delete_{{cookiecutter.object_model}}
+      Events:
+        Create{{cookiecutter.object_model|capitalize}}:
+          Type: Api
+          Properties:
+            Path: /{{cookiecutter.object_model}}s/{id}
+            Method: DELETE
+            RestApiId: !Ref Api
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref {{cookiecutter.object_model|capitalize}}sTable
+
+  Delete{{cookiecutter.object_model|capitalize}}LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${Delete{{cookiecutter.object_model|capitalize}}Function}"
+      RetentionInDays: !Ref RetentionInDays
+
+  Api:
+    Type: AWS::Serverless::Api
+    Properties:
+      EndpointConfiguration: REGIONAL
+      StageName: prod
+      TracingEnabled: true
+
+Outputs:
+  {{cookiecutter.object_model|capitalize}}sTable:
+    Description: "{{cookiecutter.object_model|capitalize}}s DynamoDB table"
+    Value: !Ref {{cookiecutter.object_model|capitalize}}sTable
+  {{cookiecutter.object_model|capitalize}}sApi:
+    Description: "API Gateway endpoint URL for Prod stage for {{cookiecutter.object_model|capitalize}}s API"
+    Value: !Sub "https://${Api}.execute-api.${AWS::Region}.amazonaws.com/prod/{{cookiecutter.object_model}}s/"
+  Create{{cookiecutter.object_model|capitalize}}Function:
+    Description: "Create{{cookiecutter.object_model|capitalize}} Function ARN"
+    Value: !GetAtt Create{{cookiecutter.object_model|capitalize}}Function.Arn
+  Read{{cookiecutter.object_model|capitalize}}Function:
+    Description: "Read{{cookiecutter.object_model|capitalize}} Function ARN"
+    Value: !GetAtt Read{{cookiecutter.object_model|capitalize}}Function.Arn
+  Update{{cookiecutter.object_model|capitalize}}Function:
+    Description: "Update{{cookiecutter.object_model|capitalize}} Function ARN"
+    Value: !GetAtt Update{{cookiecutter.object_model|capitalize}}Function.Arn
+  Delete{{cookiecutter.object_model|capitalize}}Function:
+    Description: "Delete{{cookiecutter.object_model|capitalize}} Function ARN"
+    Value: !GetAtt Delete{{cookiecutter.object_model|capitalize}}Function.Arn
+  List{{cookiecutter.object_model|capitalize}}Function:
+    Description: "List{{cookiecutter.object_model|capitalize}} Function ARN"
+    Value: !GetAtt List{{cookiecutter.object_model|capitalize}}sFunction.Arn
+
+
