@@ -21,7 +21,7 @@ Finally, it also contains unit tests, leveraging the [aws-lambda-java-tests](htt
 
 ## SAM Project Bootstrap
 
-The archetype, to be used by `sam init` is available in the [{{cookiecutter.project_name}}](https://github.com/aws-samples/java-crud-microservice-template/tree/main/%7B%7Bcookiecutter.project_name%7D%7D) folder.
+The archetype, to be used by `sam init` is available in the [{{cookiecutter.project_name|lower|replace(' ','-')}}](https://github.com/aws-samples/java-crud-microservice-template/tree/main/%7B%7Bcookiecutter.project_name%7Clower%7Creplace('%20'%2C'-')%7D%7D) folder.
 
 It uses [cookiecutter](https://cookiecutter.readthedocs.io/en/1.7.2/) (a template engine) to parameterize the project, thanks to variable defined between `{{` and `}}`. These variables can be used in folder names, file names and in the content of these files. Variables must also be declared in a [`cookiecutter.json`](https://github.com/aws-samples/java-crud-microservice-template/blob/main/cookiecutter.json) configuration file.
 
