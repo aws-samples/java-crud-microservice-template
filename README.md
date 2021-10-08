@@ -1,6 +1,6 @@
 # java-crud-microservice-template
 
-__Note__: this sample is used and described in the blog post: [TODO]()
+__Note__: this sample is used and described in the blog post: [Operating serverless at scale: Improving consistency](https://aws.amazon.com/blogs/compute/operating-serverless-at-scale-improving-consistency-part-2/)
 
 This is a sample of serverless CRUDL (Create - Read - Update - Delete - List) microservice written in Java (JDK11). It demonstrates the use of AWS Lambda, AWS DynamoDB, Amazon API Gateway and AWS SAM (Serverless Application Model). 
 
